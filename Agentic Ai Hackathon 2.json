@@ -1,0 +1,129 @@
+{
+  "name": "Agentic Ai Hackathon 2",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "21e3297d-d229-4da3-9af2-8fb665a82e01",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1c1cc198-b371-4d74-9c81-ccee971dddb0",
+      "name": "Webhook",
+      "webhookId": "21e3297d-d229-4da3-9af2-8fb665a82e01"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a friendly mental wellness assistant.\n\nThe user is feeling:{{ $json.body.mood }} \n\nGive a short, email-style message with:\n1. A motivational quote\n2. A journaling prompt (with ✍️)\n3. A mood trend feedback (with 📈)\n\nFormat it like this (no JSON):\n\n<quote>\n\n✍️ <journaling prompt>\n\n📈 <trend-based mood reflection>\n\nKeep it short, clean, and warm.also remove the unwanted things \n\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "11f18e18-0fb0-4dfb-a763-ae35b97560d6",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        240,
+        220
+      ],
+      "id": "bfcaf887-2132-4d8c-93ee-aeb4c8c99aa6",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "oS1YSyCQqt5BUmkd",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "vetriselvan.m.it.2023@snsct.org",
+        "subject": "mental health tracker",
+        "emailType": "text",
+        "message": "={{ $json.output }}",
+        "options": {
+          "appendAttribution": true
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        580,
+        0
+      ],
+      "id": "db836c40-d1f2-4646-87cd-898be0793be8",
+      "name": "Send a message",
+      "webhookId": "5956f5da-e92c-4ef5-8462-7eb61f25cf5e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "w488uEv5SamZNYSc",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "d6205b29-1c0c-4013-979b-a8070eeadd1a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3a938f96baf88740c6285b6782d84aa47337fe7a6dba6619bdd683e7fe42e3af"
+  },
+  "id": "unwiw8BU9GFgJn0F",
+  "tags": []
+}
